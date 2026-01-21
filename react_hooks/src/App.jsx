@@ -5,6 +5,7 @@ const App = () => {
   return (
     <div>
       <UseRef />
+      <p>Test</p>
     </div>
   );
 };
