@@ -9,7 +9,13 @@ const TodoList = () => {
   const [todoValue, setTodoValue] = useState([]);
 
   const createTodo = (todo) => {
-    setTodoValue([...todoValue, {id: uuidv4(), task: todo, isEdit: false}])
+    setTodoValue([...todoValue, {id: uuidv4(), task: todo, isEdit: false, isCompleted: false}])
+  }
+
+  const toggleComplete = (id) => {
+    setTodoValue(
+      todoValue.map((todo) => todo.id === id ? {...todo, isCompleted: !todo.isCompleted} : todo)
+    )
   }
 
   const deleteTodo = (id) => {
@@ -33,13 +39,15 @@ const TodoList = () => {
       <Form createTodo={ createTodo } />
 
       {
-        todoValue.map((todo, idx) => 
-          todo.isEdit ? (
-            <Edit key={idx} task={todo} editTask={editTask} />
-          ) : (
-            <Todo key={idx} task={todo} deleteTodo={deleteTodo} editTodo={editTodo} />
+        [...todoValue]
+          .sort((a, b) => a.isCompleted - b.isCompleted)
+          .map((todo, idx) =>
+            todo.isEdit ? (
+              <Edit key={todo.id} task={todo} editTask={editTask} />
+            ) : (
+              <Todo key={todo.id} task={todo} deleteTodo={deleteTodo} editTodo={editTodo} toggleComplete={toggleComplete} />
+            )
           )
-        )
       }
     </div>
   )
